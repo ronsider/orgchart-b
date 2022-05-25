@@ -59,7 +59,7 @@ namespace ariel
 
 
         //traversal algorithms:
-        void dfs(Personal ptr)
+        void bfs(Personal ptr)
         {
          queue<Personal>temp{};
          temp.push(ptr);
@@ -71,7 +71,32 @@ namespace ariel
                temp.push(i);
            }
            //cout<<temp.front().duty<<" ";
-           v_dfs.push_back(temp.front().duty);
+           v_bfs.push_back(temp.front().duty);
+           temp.pop();
+
+       } 
+       while(!temp.empty());
+
+        }
+
+        void reverse_bfs(Personal ptr)
+        {
+          queue<Personal>temp{};
+          temp.push(ptr);
+       
+       do
+       {
+        //    for(const auto& i:temp.front().underlings)
+        //    {
+        //        temp.push(i);
+        //    }
+        for( auto it=temp.front().underlings.rbegin();it!=temp.front().underlings.rend();it++)
+        {
+            temp.push(*it);
+        }
+                                                    
+           //cout<<temp.front().duty<<" ";
+           rv_bfs.push_back(temp.front().duty);
            temp.pop();
 
        } 
