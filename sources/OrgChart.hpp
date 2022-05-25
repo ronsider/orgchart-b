@@ -1,8 +1,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <queue>
 using std::string;
 using std::vector;
+using std::queue;
 namespace ariel
 {
     struct Personal
@@ -48,6 +50,34 @@ namespace ariel
 
         private:
         OrgChart* m_begin_level_order{};
+
+        //vectors, each storing some level of travesal:
+
+        vector<string>v_bfs{};//breadth 
+        vector<string>rv_bfs{};//breadth reversed
+        vector<string>v_dfs{};//depth 
+
+
+        //traversal algorithms:
+        void dfs(Personal ptr)
+        {
+         queue<Personal>temp{};
+         temp.push(ptr);
+       
+       do
+       {
+           for(const auto& i:temp.front().underlings)
+           {
+               temp.push(i);
+           }
+           //cout<<temp.front().duty<<" ";
+           v_dfs.push_back(temp.front().duty);
+           temp.pop();
+
+       } 
+       while(!temp.empty());
+
+        }
 
     };
 }
