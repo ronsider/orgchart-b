@@ -1,8 +1,16 @@
 #include <string>
 #include <iostream>
+#include <vector>
 using std::string;
+using std::vector;
 namespace ariel
 {
+    struct Personal
+    {
+        string duty{};
+        vector<Personal>underlings{};
+
+    };
     class OrgChart
     {
         public:
