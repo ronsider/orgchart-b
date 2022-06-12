@@ -155,7 +155,7 @@ public:
 
     OrgChart& add_sub(const string& str1, const string& str2)
     {
-        if(str1=="")
+        if(str1.empty())
         {
             throw "empty name is not valid";
         }
@@ -294,7 +294,9 @@ public:
 
     Graph_Iterator begin()
     {
-        if(root.duty=="")
+        v_bfs.clear();
+        insert_to_bfs(root);
+        if(root.duty.empty())
         {
             throw "graph is empty";
         }
@@ -310,7 +312,7 @@ public:
 
     Graph_Iterator end()
     {
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "graph is empty";
         }
@@ -325,7 +327,7 @@ public:
     {
         v_bfs.clear();
         insert_to_bfs(root);
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "graph is empty";
         }
@@ -342,7 +344,7 @@ public:
 
     Graph_Iterator end_level_order()
     {
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "empty graph";
         }
@@ -355,7 +357,7 @@ public:
     {
         v_dfs.clear();
         insert_to_dfs(root);
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "graph is empty";
         }
@@ -370,7 +372,7 @@ public:
     }
     Graph_Iterator end_preorder()
     {
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "empty graph";
         }
@@ -382,7 +384,7 @@ public:
     Graph_Iterator begin_reverse_order()
     {
         v_rbfs.clear();
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "empty graph";
         }
@@ -400,7 +402,7 @@ public:
 
     Graph_Iterator reverse_order()
     {
-        if(root.duty=="")
+        if(root.duty.empty())
         {
             throw "graph is empty";
         }
