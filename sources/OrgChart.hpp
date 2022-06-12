@@ -136,6 +136,10 @@ public:
         {
             return *this;
         }
+        if(str.empty())
+        {
+            throw "empty string is not valid as node root";
+        }
         root.duty = str;
         um.insert({ str,1 });
         return *this;
@@ -150,6 +154,10 @@ public:
 
     OrgChart& add_sub(const string& str1, const string& str2)
     {
+        if(str1=="")
+        {
+            throw "empty name is not valid";
+        }
         if (um.empty())
         {
             throw "graph is empty";
@@ -272,6 +280,7 @@ public:
 
     void iterate_over_v_rbfs()
     {
+        v_rbfs.clear();
         insert_to_v_rbfs(root);
         std::reverse(v_rbfs.begin(), v_rbfs.end());
         for (const auto& i : v_rbfs)
@@ -284,6 +293,10 @@ public:
 
     Graph_Iterator begin()
     {
+        if(root.duty=="")
+        {
+            throw "graph is empty";
+        }
         if(v_bfs.empty())
         {
             throw "error at range based for loop";
@@ -296,6 +309,10 @@ public:
 
     Graph_Iterator end()
     {
+        if(root.duty=="")
+        {
+            throw "graph is empty";
+        }
         return Graph_Iterator(&v_bfs[0] + v_bfs.size());
     }
 
@@ -305,7 +322,12 @@ public:
     //begin level order :
     Graph_Iterator begin_level_order()
     {
+        v_bfs.clear();
         insert_to_bfs(root);
+        if(root.duty=="")
+        {
+            throw "graph is empty";
+        }
        
         if(v_bfs.empty())
         {
@@ -319,6 +341,10 @@ public:
 
     Graph_Iterator end_level_order()
     {
+        if(root.duty=="")
+        {
+            throw "empty graph";
+        }
         return Graph_Iterator(&v_bfs[0] + v_bfs.size());
     }
     //
@@ -326,7 +352,12 @@ public:
     //begin_pre_order
     Graph_Iterator begin_preorder()
     {
+        v_dfs.clear();
         insert_to_dfs(root);
+        if(root.duty=="")
+        {
+            throw "graph is empty";
+        }
         if(v_dfs.empty())
         {
             throw "error at begin pre order";
@@ -338,6 +369,10 @@ public:
     }
     Graph_Iterator end_preorder()
     {
+        if(root.duty=="")
+        {
+            throw "empty graph";
+        }
         return Graph_Iterator(&v_dfs[0]+v_dfs.size());
     }
     //
@@ -345,6 +380,11 @@ public:
     //begin reverse order
     Graph_Iterator begin_reverse_order()
     {
+        v_rbfs.clear();
+        if(root.duty=="")
+        {
+            throw "empty graph";
+        }
         insert_to_v_rbfs(root);
         std::reverse(v_rbfs.begin(), v_rbfs.end());
         if(v_rbfs.empty())
@@ -359,6 +399,10 @@ public:
 
     Graph_Iterator reverse_order()
     {
+        if(root.duty=="")
+        {
+            throw "graph is empty";
+        }
         return Graph_Iterator(&v_rbfs[0]+v_rbfs.size());
     }
     
