@@ -140,6 +140,7 @@ public:
         {
             throw "empty string is not valid as node root";
         }
+        um.erase(root.duty);
         root.duty = str;
         um.insert({ str,1 });
         return *this;
