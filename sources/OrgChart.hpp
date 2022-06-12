@@ -19,6 +19,7 @@ namespace ariel
 {
 struct Personal
 {
+    //aggregate initialization -> incase of no constructor compilers knows for simple field which initialization fits
     string duty{};
     vector<Personal>underlings{};
   //  Personal() = default;
@@ -39,6 +40,7 @@ public:
     //begin to implemt the iterator:
     struct Graph_Iterator
     {
+        //https://internalpointers.com/post/writing-custom-iterators-modern-cpp
         using iterator_category = std::forward_iterator_tag;
         using difference_type = std::ptrdiff_t;
         using value_type = string;
@@ -57,6 +59,10 @@ public:
         }
         Graph_Iterator& operator++() 
         {
+            // if(m_ptr==&v_bfs ==>plaster
+            // {
+
+            // }
             m_ptr++; 
             return *this; 
         }
@@ -86,7 +92,12 @@ public:
     //
 
     
+    //rule of zero Classes that have custom destructors, 
+    //copy/move constructors or copy/move assignment operators
+    // should deal exclusively with ownership (which follows from the Single Responsibility Principle). 
+    //Other classes should not have custom destructors, copy/move constructors or copy/move assignment operators.
 
+    //https://en.cppreference.com/w/cpp/language/rule_of_three
     void place_in_stack(Personal& personal, stack<Personal>& st)
     {
         //cout<<personal.underlings[0].duty<<" ";
