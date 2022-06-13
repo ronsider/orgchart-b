@@ -4,12 +4,14 @@
 #include <unordered_map>
 #include <queue>
 #include <stack>
+#include <array>
 #include <algorithm>
 #include <iterator>
 #include <string>
 using std::vector;
 using std::unordered_map;
 using std::cout;
+using std::array;
 using std::endl;
 using std::string;
 using std::queue;
@@ -17,22 +19,16 @@ using std::stack;
 
 namespace ariel
 {
+    //personal serves as the node in the graph
 struct Personal
 {
     //aggregate initialization -> incase of no constructor compilers knows for simple field which initialization fits
     string duty{};
-    vector<Personal>underlings{};
-  //  Personal() = default;
-    /*Personal operator=(const Personal& personal)
-    {
-        Personal result;
-        result.duty = personal.duty;
-        result.underlings = personal.underlings;
-        return result;
-    }*/   
+    vector<Personal>underlings{};//children
 };
 
 
+//orgchart serves as container and Graph_Iterator iterates over content
 class OrgChart
 {
 public:
@@ -57,12 +53,9 @@ public:
         {
             return m_ptr;
         }
+        //prefix incement
         Graph_Iterator& operator++() 
         {
-            // if(m_ptr==&v_bfs ==>plaster
-            // {
-
-            // }
             m_ptr++; 
             return *this; 
         }
@@ -74,7 +67,8 @@ public:
             ++(*this); 
             return tmp; 
         }
-
+        
+        //used for loops to compare iterator positions
         friend bool operator== (const Graph_Iterator& a, const Graph_Iterator& b) 
         { 
             return a.m_ptr == b.m_ptr; 
@@ -85,9 +79,8 @@ public:
         };
         
         
-
     private:
-        pointer m_ptr;
+        pointer m_ptr;//Graph iterator serves as wrapper for this ptr which points to node of type string
     };
     //
 
@@ -108,7 +101,7 @@ public:
         personal.underlings.erase(it);
     }
     //
-    void insert_to_dfs(const Personal& ptr)
+    void insert_to_dfs(const Personal& ptr)//pre order algorithms
     {
         stack<Personal>temp{};
         //cout<<ptr.duty<<" ";
@@ -140,6 +133,14 @@ public:
         {
             throw "empty string is not valid as node root";
         }
+        const array<char,9>special_chars{'\n','\t','\v','\b','\r','\f','\a','\\','\?'};
+        for(const auto& i:str)
+        {
+            if(std::find(special_chars.begin(),special_chars.end(),i)!=special_chars.end())
+            {
+                throw "case of special char";
+            }
+        }
         um.erase(root.duty);
         root.duty = str;
         um.insert({ str,1 });
@@ -149,7 +150,7 @@ public:
 
     friend std::ostream& operator <<(std::ostream& os,const OrgChart& org)
         {
-            os<<"asd";
+            os<<"tree";
             return os;
         };
 
@@ -162,6 +163,21 @@ public:
         if (um.empty())
         {
             throw "graph is empty";
+        }
+        const array<char,9>special_chars{'\n','\t','\v','\b','\r','\f','\a','\\','\?'};
+        for(const auto& i:str2)
+        {
+            if(std::find(special_chars.begin(),special_chars.end(),i)!=special_chars.end())
+            {
+                throw "case of special char";
+            }
+        }
+        for(const auto& j:str1)
+        {
+            if(std::find(special_chars.begin(),special_chars.end(),j)!=special_chars.end())
+            {
+                throw "case of special char";
+            }
         }
         auto it = um.find(str1);
         if (it == um.end())
@@ -178,7 +194,6 @@ public:
             if (temp.front()->duty == str1)
             {
 
-                //ptr.underlings.push_back(Personal{ str2 });
                 temp.front()->underlings.push_back(Personal{ str2 });
 
                 um.insert({ str2,1 });
@@ -186,7 +201,7 @@ public:
                 break;
             }
   
-            for (auto& i : temp.front()->underlings)//maybe here     
+            for (auto& i : temp.front()->underlings)     
             {
                 Personal* temp_ptr = &i;
                 temp.push(temp_ptr);
@@ -198,7 +213,7 @@ public:
         return *this;
     }
 
-    void prt_this()
+    void prt_this()//not included in running, used for debugging and see if container stores elemnts in right order
     {
         queue<Personal>temp{};
 
@@ -230,7 +245,7 @@ public:
         }
 
     }
-    // 11.06 new changes
+
     void insert_to_bfs(const Personal& ptr)
     {
         queue<Personal>temp{};
@@ -258,17 +273,14 @@ public:
     ///////////
     ///////////
 
-    //new changes final vector of reverse bfs
+
     void insert_to_v_rbfs(const Personal& ptr)//a reverse represntation of bfs
     {
         queue<Personal>temp{};
         temp.push(ptr);
         do
         {
-            /*for (const auto& i : temp.front().underlings)
-            {
-                temp.push(i);
-            }*/
+      
             for (auto it = temp.front().underlings.rbegin(); it != temp.front().underlings.rend(); it++)
             {
                 temp.push(*it);
@@ -290,8 +302,7 @@ public:
         }
     }
 
-    //finshed draft of vectors. starting writing the iterators from here:
-
+    //type of iteration Graph_Iterator supports:
     Graph_Iterator begin()
     {
         v_bfs.clear();
@@ -420,6 +431,7 @@ string str{"str"};
     //look up table
     unordered_map<string, int>um{};
 
+    //node storage
     vector<string>v_dfs{};
     vector<string>v_bfs{};
     vector<string>v_rbfs{};
@@ -430,50 +442,4 @@ string str{"str"};
 }
 
 
-// int main()
-// {
-//     //do not use default constructor==> use implicit
-//     OrgChart o;
 
-//     o.add_root("shalom").add_sub("shalom", "daniel").add_sub("shalom", "shani").add_sub("shani", "itzik").add_sub("shani", "or").add_sub("daniel", "chen").add_sub("chen", "tal").add_sub("chen", "mor");
-//    // o.prt_this();
-   
-//     o.iterate_over_dfs();
-//     cout << endl << endl;
-//     o.iterate_over_bfs();
-//     cout << endl << endl;
-//     o.iterate_over_v_rbfs();
-//     cout << "\n\n\n\n\n";
-
-//     for (auto& element : o)
-//     { // this should work like level order
-//         cout << element << " ";
-//     } // prints: CEO CTO CFO COO VP_SW VP_BI
-   
-//     cout << "\n\n\n";
-//     for (auto it = o.begin_level_order(); it != o.end_level_order(); ++it)
-//     {
-//         cout << (*it) << " ";
-//     } // prints: CEO CTO CFO COO VP_SW VP_BI
-//     cout << "\n\n\n";
-//     for (auto it = o.begin_preorder(); it != o.end_preorder(); ++it) {
-//         cout << (*it) << " ";
-//     }  // prints: CEO CTO VP_SW CFO COO VP_BI
-
-//     cout << "\n\n\n";
-
-//     for (auto it = o.begin_reverse_order(); it != o.reverse_order(); ++it)
-//     {
-//         cout << (*it) << " ";
-//     } // prints: VP_SW VP_BI CTO CFO COO CEO
-
-//     cout << "\n\n\n";
-
-//     for (auto it = o.begin_level_order(); it != o.end_level_order(); ++it)
-//     {
-//         cout << it->size() << " ";
-//     } // prints: 3 3 3 3 5 5
-
-
-
-//}
